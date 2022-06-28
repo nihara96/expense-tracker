@@ -1,27 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import ExpenseForm from "./ExpenseForm";
-import './NewExpense.css'; 
+import "./NewExpense.css";
 
-function NewExpense(props){
+function NewExpense(props) { 
 
-    const saveExpenseDateHandler= (enteredExpenseData)=>{
-        const expenseData = {
-            ...enteredExpenseData,
-            id: Math.random().toString(), 
-        }
+  const [isClicked, setIsClicked] = useState(false);
 
-        props.onAddExpense(expenseData); 
-         
-        console.log(expenseData); 
-    }
+  const saveExpenseDateHandler = (enteredExpenseData) => {
+    const expenseData = {
+      ...enteredExpenseData,
+      id: Math.random().toString(),
+    };
 
-    return(
-        <>
+    props.onAddExpense(expenseData);
+    setIsClicked(false); 
+
+    console.log(expenseData);
+  };
+
+  const onClickHandler = () => {
+    setIsClicked(true);
+  };
+
+  const onCancelClickHandler = (value)=>{
+    setIsClicked(value); 
+  }
+
+  if (isClicked) {
+    return (
+      <>
         <div className="new-expense">
-            <ExpenseForm onSaveExpenseData ={saveExpenseDateHandler}/> 
+          <ExpenseForm onCancelClickHandler={onCancelClickHandler} onSaveExpenseData={saveExpenseDateHandler} />
         </div>
-        </>
+      </>
     );
+  }
+
+  return (
+    <div className="new-expense">
+      <button onClick={onClickHandler}>Add New Expense</button>
+    </div>
+  );
 }
 
-export default NewExpense; 
+export default NewExpense;
